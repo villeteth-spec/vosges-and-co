@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Missions Vosges &amp; Co</title>
+<style>
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; color: #13302a; font-family: "Segoe UI", "Trebuchet MS", Arial, Helvetica, sans-serif; font-size: 16px; line-height: 1.5;
+  background: #e9f2ee; background-image: radial-gradient(circle at 10% 0%, #d5ecdf 0, rgba(213,236,223,0) 40%), radial-gradient(circle at 95% 20%, #fdf0c4 0, rgba(253,240,196,0) 35%), linear-gradient(180deg, #eef5f1 0%, #e3eee9 100%); background-attachment: fixed; min-height: 100vh; }
+button { font-family: inherit; font-size: inherit; cursor: pointer; transition: all .18s ease; }
+.wrap { max-width: 1180px; margin: 0 auto; padding: 20px 16px 56px 16px; }
+
+/* ===== bandeau ===== */
+.top { position: relative; overflow: hidden; color: #fff; border-radius: 20px; padding: 18px 22px; display: flex; flex-wrap: wrap; align-items: center;
+  background: #1d5a48; background-image: linear-gradient(120deg, #123f33 0%, #1d5a48 45%, #2a7a5f 100%); box-shadow: 0 12px 30px rgba(18,63,51,.28); }
+.top:before { content: ""; position: absolute; right: -60px; top: -80px; width: 260px; height: 260px; border-radius: 50%; background: rgba(242,183,5,.16); }
+.top:after { content: ""; position: absolute; left: 35%; bottom: -120px; width: 220px; height: 220px; border-radius: 50%; background: rgba(255,255,255,.06); }
+.top > * { margin: 4px 12px 4px 0; position: relative; z-index: 1; }
+.brand { flex: 1 1 220px; }
+.brand b { display: block; font-size: 30px; line-height: 1.05; text-transform: uppercase; letter-spacing: 2px; font-family: Impact, "Arial Narrow", Arial, sans-serif; font-weight: normal; text-shadow: 0 2px 0 rgba(0,0,0,.18); }
+.brand b:after { content: ""; display: block; width: 46px; height: 4px; border-radius: 2px; background: #f2b705; margin: 6px 0 4px 0; }
+.brand span { font-size: 13px; opacity: .85; letter-spacing: .3px; }
+.tab { border: 2px solid rgba(255,255,255,.35); background: rgba(255,255,255,.08); color: #fff; border-radius: 999px; padding: 7px 16px; font-weight: bold; font-size: 14px; margin: 3px 6px 3px 0; }
+.tab:hover { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.7); }
+.tab.on { background: #fff; color: #1d5a48; border-color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.18); }
+.score { background: rgba(0,0,0,.22); border: 1px solid rgba(255,255,255,.18); border-radius: 14px; padding: 6px 14px; font-family: Consolas, "Courier New", monospace; font-size: 22px; font-weight: bold; }
+.score .st { color: #f2b705; text-shadow: 0 0 10px rgba(242,183,5,.6); }
+.tool { background: #f2b705; background-image: linear-gradient(180deg, #ffcd2e 0%, #f2b705 100%); color: #2a2100; border: 0; border-radius: 10px; padding: 9px 14px; font-weight: bold; font-size: 14px; margin-right: 6px; box-shadow: 0 3px 0 #c99500, 0 6px 14px rgba(0,0,0,.18); }
+.tool:hover { transform: translateY(-1px); box-shadow: 0 4px 0 #c99500, 0 8px 18px rgba(0,0,0,.22); }
+.tool:active { transform: translateY(2px); box-shadow: 0 1px 0 #c99500; }
+
+/* ===== mise en page ===== */
+.grid { display: flex; flex-wrap: wrap; margin: 22px -11px 0 -11px; align-items: flex-start; }
+.col { padding: 0 11px; margin-bottom: 22px; }
+.col1 { width: 54%; }
+.col2 { width: 46%; }
+@media (max-width: 860px) { .col1, .col2 { width: 100%; } }
+.panel { position: relative; background: #fff; border: 1px solid #d9e6e0; border-radius: 20px; padding: 22px; box-shadow: 0 2px 4px rgba(19,48,42,.04), 0 12px 28px rgba(19,48,42,.08); }
+#dossier { border-top: 6px solid #1d5a48; }
+#step { border-top: 6px solid #f2b705; }
+
+.eyebrow { display: inline-block; font-family: Consolas, "Courier New", monospace; font-size: 11px; font-weight: bold; letter-spacing: 2px; text-transform: uppercase; color: #1d5a48; background: #e2f1ea; border-radius: 999px; padding: 3px 10px; }
+h1 { font-family: Impact, "Arial Narrow", Arial, sans-serif; font-weight: normal; text-transform: uppercase; font-size: 34px; line-height: 1.05; margin: 10px 0 8px 0; letter-spacing: .5px; color: #123f33; }
+.ctx { color: #4d6862; margin: 0 0 16px 0; }
+.ctx b { color: #c27f00; }
+
+/* ===== tableau ===== */
+.tbl-wrap { overflow-x: auto; border: 1px solid #d9e6e0; border-radius: 14px; position: relative; box-shadow: inset 0 1px 0 #fff; }
+table { border-collapse: collapse; width: 100%; font-size: 15px; }
+th, td { padding: 10px 12px; border-bottom: 1px solid #e4ede9; text-align: right; white-space: nowrap; }
+th { font-family: Consolas, "Courier New", monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: #fff; background: #1d5a48; }
+tbody tr:nth-child(even) td { background: #f6faf8; }
+tbody tr:hover td { background: #edf6f1; }
+tbody tr:last-child td { border-bottom: 0; }
+th:first-child, td:first-child { text-align: left; }
+td:first-child { font-weight: bold; color: #123f33; }
+td.gap span { display: inline-block; min-width: 3.4em; border: 2px dashed #c8d8d1; border-radius: 8px; text-align: center; color: #8aa39c; font-family: Consolas, monospace; font-weight: bold; }
+tbody tr td.cur, tbody tr:hover td.cur { background: #fff4cc; }
+td.cur span { border-color: #f2b705; color: #b07f00; background: #fff; animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(242,183,5,.55); } 50% { box-shadow: 0 0 0 5px rgba(242,183,5,0); } }
+td.fill { font-family: Consolas, "Courier New", monospace; font-weight: bold; color: #1f8a4c; animation: pop .35s ease-out; }
+@keyframes pop { 0% { opacity: 0; transform: scale(.8); } 100% { opacity: 1; transform: scale(1); } }
+.stamp { position: absolute; right: 14px; top: 35%; transform: rotate(-12deg); -ms-transform: rotate(-12deg); border: 4px solid #1f8a4c; color: #1f8a4c; background: rgba(255,255,255,.92); font-family: Impact, Arial, sans-serif; font-size: 34px; letter-spacing: 4px; padding: 2px 16px; border-radius: 10px; box-shadow: 0 6px 18px rgba(31,138,76,.25); animation: stamp .45s cubic-bezier(.2,1.6,.4,1); }
+@keyframes stamp { 0% { opacity: 0; transform: rotate(-12deg) scale(2.2); } 100% { opacity: 1; transform: rotate(-12deg) scale(1); } }
+.extra { margin: 14px 0 0 0; font-size: 14px; color: #4d6862; }
+.extra b { color: #13302a; }
+.ok-txt { color: #1f8a4c; font-family: Consolas, monospace; }
+
+/* ===== étapes ===== */
+.dots { margin: 12px 0 16px 0; }
+.dot { display: inline-block; width: 28px; height: 8px; border-radius: 4px; background: #dde8e3; margin: 0 4px 4px 0; transition: all .3s ease; }
+.dot.on { background: #f2b705; width: 42px; box-shadow: 0 0 0 3px rgba(242,183,5,.2); }
+.dot.ok { background: #1f8a4c; }
+.q { font-size: 19px; font-weight: bold; margin: 0 0 6px 0; color: #123f33; line-height: 1.35; }
+.sub { color: #4d6862; margin: 0 0 16px 0; font-size: 15px; }
+
+.field { margin-bottom: 14px; padding: 10px 12px; border-radius: 12px; background: #f6faf8; border: 1px solid #e4ede9; }
+.field label { display: block; font-weight: bold; margin-bottom: 6px; color: #123f33; }
+.field input { width: 100%; max-width: 220px; border: 2px solid #cfdcd6; border-radius: 10px; background: #fff; color: #13302a; font-family: Consolas, "Courier New", monospace; font-size: 19px; font-weight: bold; padding: 8px 12px; text-align: right; transition: all .18s ease; }
+.field input:focus { border-color: #f2b705; outline: none; box-shadow: 0 0 0 4px rgba(242,183,5,.22); }
+.field .u { font-family: Consolas, monospace; color: #4d6862; margin-left: 8px; font-weight: bold; }
+.field.good { background: #e7f6ee; border-color: #b9e2ca; }
+.field.good input { border-color: #1f8a4c; background: #fff; color: #1f8a4c; }
+.field.wrong { background: #fdf0ed; border-color: #f2c4bb; animation: shake .35s ease; }
+.field.wrong input { border-color: #c2402f; background: #fff; }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+.msg { font-size: 14px; margin-top: 6px; }
+.msg.bad { color: #c2402f; }
+.msg.good { color: #1f8a4c; }
+.meth { font-family: Consolas, monospace; font-size: 14px; background: #fff6d6; border: 1px dashed #f2b705; border-radius: 8px; padding: 8px 10px; margin-top: 8px; }
+
+.opt { display: block; width: 100%; text-align: left; border: 2px solid #d9e6e0; background: #fff; color: #13302a; border-radius: 14px; padding: 13px 16px; font-weight: bold; margin-bottom: 10px; box-shadow: 0 2px 0 #d9e6e0; }
+.opt:hover { border-color: #1d5a48; background: #f2f9f5; transform: translateX(3px); }
+.opt[disabled]:hover { transform: none; }
+.opt.no { border-color: #c2402f; background: #fdf0ed; box-shadow: 0 2px 0 #f2c4bb; }
+.opt.yes { border-color: #1f8a4c; background: #e7f6ee; box-shadow: 0 2px 0 #b9e2ca; }
+.why { font-size: 14px; margin-top: 4px; font-weight: bold; }
+
+/* ===== boutons ===== */
+.actions { margin-top: 18px; }
+.btn { border: 0; border-radius: 12px; padding: 11px 18px; font-weight: bold; margin: 0 8px 8px 0; }
+.btn.main { background: #1d5a48; background-image: linear-gradient(180deg, #2a7a5f 0%, #1d5a48 100%); color: #fff; box-shadow: 0 3px 0 #123f33, 0 8px 16px rgba(29,90,72,.25); }
+.btn.main:hover { transform: translateY(-1px); box-shadow: 0 4px 0 #123f33, 0 10px 20px rgba(29,90,72,.3); }
+.btn.main:active { transform: translateY(2px); box-shadow: 0 1px 0 #123f33; }
+.btn.soft { background: #fff6d6; color: #13302a; border: 2px solid #f2b705; }
+.btn.soft:hover { background: #ffeeb0; }
+.btn.ghost { background: #fff; color: #4d6862; border: 2px solid #d9e6e0; }
+.btn.ghost:hover { border-color: #1d5a48; color: #1d5a48; }
+.btn[disabled], .btn[disabled]:hover { opacity: .45; cursor: default; transform: none; }
+.hint { margin-top: 16px; background: #fff8de; border-left: 5px solid #f2b705; border-radius: 10px; padding: 12px 14px; font-size: 15px; box-shadow: 0 4px 12px rgba(242,183,5,.12); }
+.feedback { margin-top: 12px; font-weight: bold; min-height: 1.5em; }
+.feedback.good { color: #1f8a4c; font-size: 18px; }
+.feedback.bad { color: #c2402f; }
+
+/* ===== victoire ===== */
+.win { text-align: center; padding: 14px 0; }
+.big { font-size: 60px; color: #f2b705; letter-spacing: 8px; line-height: 1.2; text-shadow: 0 4px 14px rgba(242,183,5,.45); }
+.big .off { color: #e3e8e5; text-shadow: none; }
+.badge { display: inline-block; margin-top: 10px; background: #1d5a48; background-image: linear-gradient(120deg, #123f33 0%, #2a7a5f 100%); color: #fff; font-weight: bold; font-size: 18px; text-transform: uppercase; letter-spacing: 1px; padding: 8px 20px; border-radius: 999px; border: 3px solid #f2b705; box-shadow: 0 8px 20px rgba(29,90,72,.3); }
+
+/* ===== tiroirs ===== */
+.drawer { position: fixed; right: 18px; bottom: 18px; width: 380px; max-width: 92%; max-height: 80%; overflow: auto; background: #fff; border: 0; border-top: 6px solid #f2b705; border-radius: 18px; padding: 18px; box-shadow: 0 20px 50px rgba(0,0,0,.28); z-index: 10; animation: slide .25s ease-out; }
+@keyframes slide { 0% { opacity: 0; transform: translateY(20px); } 100% { opacity: 1; transform: translateY(0); } }
+.drawer h2 { margin: 0 0 10px 0; font-size: 24px; font-family: Impact, Arial, sans-serif; font-weight: normal; text-transform: uppercase; color: #123f33; letter-spacing: .5px; }
+.x { float: right; background: #f1f5f3; border: 0; color: #4d6862; font-size: 22px; line-height: 1; width: 34px; height: 34px; border-radius: 50%; }
+.x:hover { background: #fbe7e3; color: #c2402f; }
+.formula { border-bottom: 1px solid #e4ede9; padding: 12px 0; }
+.formula:last-child { border-bottom: 0; }
+.formula b { display: block; color: #1d5a48; }
+.formula code { display: block; font-family: Consolas, monospace; font-size: 14px; background: #f1f7f4; border-left: 3px solid #1d5a48; border-radius: 6px; padding: 7px 10px; margin-top: 5px; }
+.formula small { color: #4d6862; }
+.calc-screen { width: 100%; font-family: Consolas, monospace; font-size: 22px; font-weight: bold; text-align: right; padding: 12px; border: 2px solid #1d5a48; border-radius: 12px; background: #123f33; color: #e2f4ea; }
+.calc-screen:focus { outline: none; box-shadow: 0 0 0 4px rgba(242,183,5,.3); }
+.calc-out { font-family: Consolas, monospace; font-size: 24px; font-weight: bold; text-align: right; color: #1f8a4c; min-height: 1.6em; margin: 8px 0; }
+.keys button { width: 23%; margin: 0 1% 7px 0; padding: 12px 0; border-radius: 10px; border: 1px solid #d9e6e0; background: #f6faf8; color: #13302a; font-family: Consolas, monospace; font-size: 18px; font-weight: bold; box-shadow: 0 2px 0 #d9e6e0; }
+.keys button:hover { background: #e2f1ea; }
+.keys button:active { transform: translateY(2px); box-shadow: none; }
+.keys button.eq { background: #f2b705; color: #2a2100; border: 0; box-shadow: 0 2px 0 #c99500; }
+#err { position: fixed; left: 16px; right: 16px; bottom: 16px; background: #c2402f; color: #fff; padding: 12px; border-radius: 10px; z-index: 99; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><b>Vosges &amp; Co</b><span>Assistant(e) commercial(e) &middot; Soutien calculs commerciaux</span></div>
+    <div id="tabs"></div>
+    <div class="score"><span class="st">&#9733;</span> <span id="stars">0</span> <span style="font-size:14px;opacity:.7">/ <span id="maxstars">0</span></span></div>
+    <div>
+      <button class="tool" id="btnFiche" type="button">Fiche m&eacute;thode</button>
+      <button class="tool" id="btnCalc" type="button">Calculatrice</button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="col col1"><div class="panel" id="dossier"><p>Chargement&hellip;</p></div></div>
+    <div class="col col2"><div class="panel" id="step"><p>Si ce message reste affich&eacute;, ouvre le fichier avec Chrome, Edge ou Firefox (pas dans un aper&ccedil;u).</p></div></div>
+  </div>
+</div>
+
+<div class="drawer" id="fiche" hidden>
+  <button class="x" type="button" data-close="fiche">&times;</button>
+  <h2>Fiche m&eacute;thode</h2>
+  <div class="formula"><b>Montant brut</b><code>Prix unitaire &times; Quantit&eacute;</code></div>
+  <div class="formula"><b>Remise de 15 %</b><code>Remise = Brut &times; 15 &divide; 100</code><code>Net = Brut &minus; Remise = Brut &times; 0,85</code><small>0,85 = 1 &minus; 0,15 (on garde 85 % du prix)</small></div>
+  <div class="formula"><b>Remises successives</b><code>Net 1 = Prix &times; 0,85<br>Net 2 = Net 1 &times; 0,97</code><small>Les taux ne s'additionnent jamais : 15 % puis 3 % &ne; 18 %</small></div>
+  <div class="formula"><b>Panier moyen</b><code>CA &divide; Nombre de clients</code></div>
+  <div class="formula"><b>Part en %</b><code>(Partie &divide; Total) &times; 100</code><small>Toutes les parts ensemble font 100 %</small></div>
+  <div class="formula"><b>Taux d'&eacute;volution</b><code>(Arriv&eacute;e &minus; D&eacute;part) &divide; D&eacute;part &times; 100</code><small>R&eacute;sultat n&eacute;gatif = baisse</small></div>
+  <div class="formula"><b>Moyenne</b><code>Somme des valeurs &divide; Nombre de valeurs</code></div>
+</div>
+
+<div class="drawer" id="calc" hidden>
+  <button class="x" type="button" data-close="calc">&times;</button>
+  <h2>Calculatrice</h2>
+  <input class="calc-screen" id="calcIn" type="text" autocomplete="off" placeholder="ex : 26,4 x 25">
+  <div class="calc-out" id="calcOut"></div>
+  <div class="keys" id="keys"></div>
+</div>
+
+<script>
+window.onerror = function (msg, src, line) {
+  var d = document.getElementById('err');
+  if (!d) { d = document.createElement('div'); d.id = 'err'; document.body.appendChild(d); }
+  d.innerHTML = 'Erreur : ' + msg + ' (ligne ' + line + ')';
+};
+
+/* ===== outils ===== */
+function $(id) { return document.getElementById(id); }
+function fmt(n, d) {
+  if (d === undefined) d = 2;
+  var neg = n < 0; n = Math.abs(n);
+  var s = n.toFixed(d), parts = s.split('.'), ent = parts[0], out = '';
+  while (ent.length > 3) { out = ' ' + ent.slice(-3) + out; ent = ent.slice(0, -3); }
+  out = ent + out;
+  if (parts[1]) out += ',' + parts[1];
+  return (neg ? '−' : '') + out;
+}
+function fmtE(n) { return fmt(n) + ' €'; }
+function fmtP(n) { return fmt(n) + ' %'; }
+function parse(s) {
+  s = String(s).replace(/[\s  €%]/g, '').replace(/−/g, '-').replace(',', '.');
+  if (s === '' || isNaN(Number(s))) return null;
+  return Number(s);
+}
+function near(a, b, t) { return Math.abs(a - b) <= t; }
+function findTrap(arr, v) { for (var i = 0; i < arr.length; i++) if (near(v, arr[i].v, arr[i].t)) return arr[i]; return null; }
+function up(el, cls) { while (el && el !== document) { if (el.className && (' ' + el.className + ' ').indexOf(' ' + cls + ' ') > -1) return el; el = el.parentNode; } return null; }
+function upTag(el, tag) { while (el && el !== document) { if (el.tagName === tag) return el; el = el.parentNode; } return null; }
+function attr(el, a) { return el.getAttribute(a); }
+
+function F(id, label, ans, unit, method, traps, tol) {
+  return { id: id, label: label, ans: ans, unit: unit, method: method, traps: traps || [],
+    tol: tol !== undefined ? tol : (unit === '%' ? 0.051 : unit === '' ? 0.5 : 0.011) };
+}
+function pctTrap(v) { return { v: v / 100, t: 0.0006, m: "Presque ! Tu as un nombre décimal : multiplie par 100 pour l'avoir en %." }; }
+function evolTraps(a, b) {
+  return [pctTrap((b - a) / a * 100),
+    { v: -(b - a) / a * 100, t: 0.06, m: "Attention au signe : fais (arrivée − départ), pas l'inverse." },
+    { v: (b - a) / b * 100, t: 0.06, m: "Il faut diviser par la valeur de DÉPART (la plus ancienne)." }];
+}
+function netTraps(brut) {
+  return [{ v: brut * 0.15, t: 0.011, m: "Ça, c'est le montant de la remise. Il faut l'enlever au montant brut." },
+    { v: brut * 1.15, t: 0.011, m: "Une remise fait baisser le prix : multiplie par 0,85, pas par 1,15." }];
+}
+
+/* ===== données ===== */
+var articles = [['Sac à dos', 26.4, 25, 'sac'], ['Gourde', 12.5, 30, 'gou'], ['Pochette cadeau', 9.8, 40, 'poc'], ['Cage de buts', 16.8, 15, 'cag']];
+var vendeurs = [['A', 3240, 3510, 70], ['B', 2875, 3010, 62], ['C', 4550, 4380, 75], ['D', 3180, 3495, 81]];
+var mois = [['Jan.', 4200], ['Fév.', 4600], ['Mars', 5000], ['Avr.', 4800], ['Mai', 5300], ['Juin', 5600]];
+var ca50 = 0, ca49 = 0, prodTot = 0, totB = 0, i;
+for (i = 0; i < vendeurs.length; i++) { ca50 += vendeurs[i][2]; ca49 += vendeurs[i][1]; }
+for (i = 0; i < mois.length; i++) prodTot += mois[i][1];
+for (i = 0; i < articles.length; i++) totB += articles[i][1] * articles[i][2];
+
+/* Mission 1 */
+var M1 = [
+  { mc: true, q: "Échauffement : le fournisseur fait 15 % de remise. Par quel nombre je multiplie le prix pour avoir directement le prix NET ?",
+    opts: [['0,15', 0, "0,15 donne le montant de la remise, pas le prix qui reste."], ['1,15', 0, "1,15 ferait AUGMENTER le prix de 15 %."], ['0,85', 1, "Oui ! 1 − 0,15 = 0,85 : on garde 85 % du prix."], ['15', 0, "Multiplier par 15 multiplierait le prix par 15 !"]],
+    hint: "Si on enlève 15 %, il reste 100 % − 15 % = … %" },
+  { q: "Sac à dos : calcule le montant brut, la remise, puis le montant net.", sub: "PU brut 26,40 € · Quantité 25",
+    hint: "<b>Brut = PU × Quantité</b> · <b>Remise = Brut × 15 ÷ 100</b> · <b>Net = Brut − Remise</b>",
+    fields: [F('sac_b', 'Montant brut', 660, '€', '26,4 × 25 = 660 €'),
+      F('sac_r', 'Montant de la remise', 99, '€', '660 × 15 ÷ 100 = 99 €', [{ v: 561, t: 0.011, m: "Ça, c'est le net ! Ici on veut seulement la remise (ce qu'on enlève)." }]),
+      F('sac_n', 'Montant net', 561, '€', '660 − 99 = 561 € (ou 660 × 0,85)', netTraps(660))] }
+];
+for (i = 1; i < articles.length; i++) {
+  (function (a) {
+    var b = a[1] * a[2];
+    M1.push({ q: a[0] + " : calcule le montant brut puis le montant net.", sub: "PU brut " + fmtE(a[1]) + " · Quantité " + a[2],
+      hint: "<b>Brut = PU × Quantité</b> puis <b>Net = Brut × 0,85</b>",
+      fields: [F(a[3] + '_b', 'Montant brut', b, '€', fmt(a[1], 1) + ' × ' + a[2] + ' = ' + fmtE(b)),
+        F(a[3] + '_n', 'Montant net', b * 0.85, '€', fmt(b) + ' × 0,85 = ' + fmtE(b * 0.85), netTraps(b))] });
+  })(articles[i]);
+}
+M1.push(
+  { q: "Calcule le total BRUT puis le total NET de la commande.", sub: "Additionne les colonnes du tableau.",
+    hint: "Total brut = 660 + 375 + 392 + 252. Total net : additionne les montants nets (ou Total brut × 0,85).",
+    fields: [F('tot_b', 'Total brut', totB, '€', '660 + 375 + 392 + 252 = 1 679 €'),
+      F('tot_n', 'Total net', totB * 0.85, '€', '561 + 318,75 + 333,20 + 214,20 = 1 427,15 €', netTraps(totB))] },
+  { mc: true, q: "Le drap de plage a 15 % puis 3 % de remises successives. Est-ce la même chose qu'une remise de 18 % ?",
+    opts: [["Oui, 15 + 3 = 18 %", 0, "Non : la 2e remise s'applique sur un prix déjà réduit, pas sur le prix de départ."], ["Non, la 2e remise se calcule sur le prix déjà réduit", 1, "Exact ! On applique ×0,85 puis ×0,97."]],
+    hint: "La remise de 3 % se calcule sur quel prix : 16 € ou le prix après la 1re remise ?" },
+  { q: "Drap de plage (16 € HT) : calcule le PU NET 1 puis le PU NET 2.", sub: "Remise 1 : 15 % · Remise 2 : 3 %",
+    hint: "<b>Net 1 = 16 × 0,85</b> puis <b>Net 2 = Net 1 × 0,97</b> (car 1 − 0,03 = 0,97)",
+    fields: [F('drap1', 'PU NET 1', 13.6, '€', '16 × 0,85 = 13,60 €', [{ v: 2.4, t: 0.011, m: "2,40 € c'est la remise. Le net, c'est 16 − 2,40." }]),
+      F('drap2', 'PU NET 2', 13.192, '€', '13,60 × 0,97 = 13,19 €', [{ v: 13.12, t: 0.011, m: "Tu as additionné les taux (18 %). Applique 3 % sur le NET 1 : 13,60 × 0,97." }, { v: 10.6, t: 0.011, m: "On enlève 3 %, pas 3 € ! 13,60 × 0,97." }])] }
+);
+
+/* Mission 2 */
+function vf(fn) { var r = []; for (var k = 0; k < vendeurs.length; k++) r.push(fn(vendeurs[k])); return r; }
+function mcVendeur(q, good, okMsg, badMsg, hint) {
+  return { mc: true, q: q, hint: hint, opts: vf(function (v) { return ['Vendeur ' + v[0], v[0] === good ? 1 : 0, v[0] === good ? okMsg : badMsg]; }) };
+}
+var M2 = [
+  { q: "Calcule le panier moyen de chaque vendeur en semaine 50.", sub: "Arrondis au centime.",
+    hint: "<b>Panier moyen = CA semaine 50 ÷ Nombre de clients</b>. Ex. vendeur A : 3 510 ÷ 70",
+    fields: vf(function (v) { return F('pm' + v[0], 'Vendeur ' + v[0], v[2] / v[3], '€', fmt(v[2], 0) + ' ÷ ' + v[3] + ' = ' + fmtE(v[2] / v[3]),
+      [{ v: v[1] / v[3], t: 0.011, m: "Tu as pris le CA de la semaine 49. Utilise la semaine 50." }, { v: v[3] / v[2], t: 0.001, m: "C'est à l'envers : CA ÷ clients." }]); }) },
+  { q: "Calcule le CA total de la semaine 50.", sub: "Les 4 vendeurs ensemble.",
+    hint: "Additionne la colonne « CA S50 » : 3 510 + 3 010 + 4 380 + 3 495",
+    fields: [F('ca50', 'CA total S50', ca50, '€', '3 510 + 3 010 + 4 380 + 3 495 = 14 395 €', [{ v: ca49, t: 0.5, m: "Ça c'est la semaine 49. On veut la semaine 50." }])] },
+  { q: "Calcule la part du CA de chaque vendeur, en %.", sub: "Arrondis à 0,01 %. Vérifie : le total doit faire 100 %.",
+    hint: "<b>Part = CA du vendeur ÷ CA total × 100</b>. Ex. A : 3 510 ÷ 14 395 × 100",
+    fields: vf(function (v) { var p = v[2] / ca50 * 100; return F('pa' + v[0], 'Vendeur ' + v[0], p, '%', fmt(v[2], 0) + ' ÷ 14 395 × 100 = ' + fmtP(p), [pctTrap(p)]); }) },
+  { q: "Calcule le taux d'évolution du CA entre S49 et S50.", sub: "Arrondis à 0,01 %. Une baisse donne un taux négatif (mets le signe −).",
+    hint: "<b>(CA S50 − CA S49) ÷ CA S49 × 100</b>. Ex. A : (3 510 − 3 240) ÷ 3 240 × 100",
+    fields: vf(function (v) { var e = (v[2] - v[1]) / v[1] * 100; return F('ev' + v[0], 'Vendeur ' + v[0], e, '%', '(' + fmt(v[2], 0) + ' − ' + fmt(v[1], 0) + ') ÷ ' + fmt(v[1], 0) + ' × 100 = ' + fmtP(e), evolTraps(v[1], v[2])); }) },
+  mcVendeur("Analyse express 1/3 : quel vendeur a le CA le plus élevé en semaine 50 ?", 'C', "Oui : 4 380 €, soit 30,43 % du CA.", "Regarde la colonne CA S50 : qui a le plus gros chiffre ?", "Compare la colonne « CA S50 »."),
+  mcVendeur("Analyse express 2/3 : quel vendeur a la plus forte progression ?", 'D', "Oui : +9,91 %, juste devant A (+8,33 %).", "Regarde la colonne « Évolution » : quel taux est le plus grand ?", "La progression, c'est le taux d'évolution, pas le CA."),
+  { mc: true, q: "Analyse express 3/3 : quel vendeur doit attirer l'attention du responsable ?", hint: "Cherche le seul taux d'évolution négatif.",
+    opts: [['Vendeur B, car il a le plus petit CA', 0, "B progresse (+4,70 %). Ce n'est pas lui qui inquiète."], ['Vendeur C, car son CA baisse', 1, "Exact : C a le meilleur CA mais il recule de 3,74 %. Il faut comprendre pourquoi."], ['Vendeur D, car son panier moyen est faible', 0, "D a beaucoup de clients et progresse le plus. Ce n'est pas l'alerte principale."]] }
+];
+
+/* Mission 3 */
+var parts = [], evols = [];
+for (i = 0; i < mois.length; i++) {
+  var pp = mois[i][1] / prodTot * 100;
+  parts.push(F('pp' + i, mois[i][0], pp, '%', fmt(mois[i][1], 0) + ' ÷ 29 500 × 100 = ' + fmtP(pp), [pctTrap(pp)]));
+  if (i > 0) {
+    var a0 = mois[i - 1][1], a1 = mois[i][1], ev = (a1 - a0) / a0 * 100;
+    evols.push(F('pe' + i, mois[i - 1][0] + ' → ' + mois[i][0], ev, '%', '(' + fmt(a1, 0) + ' − ' + fmt(a0, 0) + ') ÷ ' + fmt(a0, 0) + ' × 100 = ' + fmtP(ev), evolTraps(a0, a1)));
+  }
+}
+var M3 = [
+  { q: "Calcule la production totale sur les six mois.", sub: "En nombre de coffrets.", hint: "4 200 + 4 600 + 5 000 + 4 800 + 5 300 + 5 600",
+    fields: [F('ptot', 'Production totale (coffrets)', prodTot, '', '4 200 + 4 600 + 5 000 + 4 800 + 5 300 + 5 600 = 29 500')] },
+  { q: "Calcule la production moyenne mensuelle.", sub: "Arrondis à 0,01.", hint: "<b>Moyenne = Total ÷ Nombre de mois</b> = 29 500 ÷ 6",
+    fields: [F('pmoy', 'Moyenne par mois (coffrets)', prodTot / 6, '', '29 500 ÷ 6 = 4 916,67 coffrets',
+      [{ v: prodTot / 5, t: 0.5, m: "Compte bien les mois : il y en a 6." }, { v: prodTot / 12, t: 0.5, m: "On étudie 6 mois, pas 12." }], 0.011)] },
+  { q: "Calcule la part de chaque mois dans la production totale, en %.", sub: "Arrondis à 0,01 %.",
+    hint: "<b>Part = Production du mois ÷ 29 500 × 100</b>. Ex. janvier : 4 200 ÷ 29 500 × 100", fields: parts },
+  { q: "Calcule les taux d'évolution d'un mois à l'autre.", sub: "Arrondis à 0,01 %. Une baisse donne un taux négatif.",
+    hint: "<b>(Mois d'arrivée − Mois de départ) ÷ Mois de départ × 100</b>. Ex. janv.→fév. : (4 600 − 4 200) ÷ 4 200 × 100", fields: evols },
+  { q: "Pour le bilan : calcule l'évolution globale de janvier à juin.", sub: "Arrondis à 0,01 %.", hint: "(5 600 − 4 200) ÷ 4 200 × 100",
+    fields: [F('pglob', 'Janvier → Juin', 1400 / 42, '%', '(5 600 − 4 200) ÷ 4 200 × 100 = 33,33 %', evolTraps(4200, 5600))] },
+  { mc: true, q: "Bilan : la production suit-elle une tendance globalement positive ?", hint: "Compte les taux positifs et regarde l'évolution globale.",
+    opts: [["Non, car elle baisse en avril", 0, "Une seule baisse (−4 %) ne change pas la tendance : sur 6 mois, la production augmente de 33,33 %."], ["Oui : +33,33 % de janvier à juin, malgré une baisse de 4 % en avril", 1, "Parfait, c'est une phrase de bilan complète et justifiée par un calcul."], ["On ne peut pas savoir", 0, "Si : les taux d'évolution et l'évolution globale permettent de conclure."]] }
+];
+
+var MISSIONS = [
+  { title: "Le bon de commande express", time: "20 min", badge: "Pro de la remise", steps: M1,
+    ctx: "Ton responsable prépare une commande de cadeaux pour plusieurs entreprises. Le fournisseur accorde <b>15 % de remise</b> sur tout le catalogue.",
+    head: ['Article', 'PU brut HT', 'Qté', 'Montant brut', 'Remise', 'Montant net'],
+    rows: function () {
+      var r = [];
+      for (var k = 0; k < articles.length; k++) { var a = articles[k]; r.push([a[0], fmtE(a[1]), a[2], { f: a[3] + '_b' }, k === 0 ? { f: 'sac_r' } : '—', { f: a[3] + '_n' }]); }
+      r.push(['<b>TOTAL</b>', '', '', { f: 'tot_b' }, '', { f: 'tot_n' }]);
+      return r;
+    },
+    extra: function () { return "<b>Drap de plage</b> · 16,00 € HT · remises 15 % puis 3 % → PU NET 1 : " + cellTxt('drap1') + " · PU NET 2 : " + cellTxt('drap2'); } },
+  { title: "Le tableau de bord des vendeurs", time: "20 min", badge: "Analyste des ventes", steps: M2,
+    ctx: "Le responsable prépare la réunion commerciale. Il te transmet les résultats de quatre vendeurs.",
+    head: ['Vendeur', 'CA S49', 'CA S50', 'Clients S50', 'Panier moyen', 'Part du CA', 'Évolution'],
+    rows: function () {
+      var r = vf(function (v) { return [v[0], fmtE(v[1]), fmtE(v[2]), v[3], { f: 'pm' + v[0] }, { f: 'pa' + v[0] }, { f: 'ev' + v[0] }]; });
+      r.push(['<b>TOTAL</b>', '', { f: 'ca50' }, '', '', '100 %', '']);
+      return r;
+    } },
+  { title: "L'enquête sur l'activité", time: "20 min", badge: "Détective des données", steps: M3,
+    ctx: "Vosges &amp; Co suit sa production de coffrets cadeaux sur six mois. À toi de transformer les chiffres en informations utiles.",
+    head: ['Mois', 'Jan.', 'Fév.', 'Mars', 'Avr.', 'Mai', 'Juin'],
+    rows: function () {
+      var r1 = ['Production'], r2 = ['% du total'], r3 = ['Évolution', '—'];
+      for (var k = 0; k < mois.length; k++) { r1.push(fmt(mois[k][1], 0)); r2.push({ f: 'pp' + k }); if (k > 0) r3.push({ f: 'pe' + k }); }
+      return [r1, r2, r3];
+    },
+    extra: function () { return "Total : " + cellTxt('ptot') + " · Moyenne mensuelle : " + cellTxt('pmoy') + " · Janvier → Juin : " + cellTxt('pglob'); } }
+];
+
+var FIELD = {}, maxStars = 0;
+for (var m = 0; m < MISSIONS.length; m++) {
+  maxStars += MISSIONS[m].steps.length * 3;
+  for (var s = 0; s < MISSIONS[m].steps.length; s++) {
+    var fl = MISSIONS[m].steps[s].fields || [];
+    for (var j = 0; j < fl.length; j++) FIELD[fl[j].id] = fl[j];
+  }
+}
+function show(f) {
+  if (f.unit === '%') return fmtP(f.ans);
+  if (f.unit === '€') return fmtE(f.ans);
+  return fmt(f.ans, f.id === 'pmoy' ? 2 : 0);
+}
+
+/* ===== état ===== */
+var S, cur;
+function freshState() { S = { m: 0, step: [0, 0, 0], solved: {}, stars: {}, done: [false, false, false] }; }
+function resetCur() { cur = { errors: 0, hint: false, method: false, mcWrong: {} }; }
+freshState(); resetCur();
+function totalStars() { var t = 0; for (var k in S.stars) if (S.stars.hasOwnProperty(k)) t += S.stars[k]; return t; }
+function cellTxt(id) { return S.solved[id] ? '<b class="ok-txt">' + show(FIELD[id]) + '</b>' : '<b>?</b>'; }
+
+/* ===== affichage ===== */
+function renderTop() {
+  var h = '';
+  for (var k = 0; k < MISSIONS.length; k++)
+    h += '<button type="button" class="tab' + (k === S.m ? ' on' : '') + '" data-m="' + k + '">Mission ' + (k + 1) + (S.done[k] ? ' ✓' : '') + '</button>';
+  $('tabs').innerHTML = h;
+  $('stars').innerHTML = totalStars();
+  $('maxstars').innerHTML = maxStars;
+}
+
+function renderDossier() {
+  var M = MISSIONS[S.m], st = M.steps[S.step[S.m]], curIds = {}, k, c;
+  if (st && !S.done[S.m] && st.fields) for (k = 0; k < st.fields.length; k++) curIds[st.fields[k].id] = 1;
+  var h = '<div class="eyebrow">Mission ' + (S.m + 1) + ' · ' + M.time + '</div><h1>' + M.title + '</h1><p class="ctx">' + M.ctx + '</p>';
+  h += '<div class="tbl-wrap"><table><thead><tr>';
+  for (k = 0; k < M.head.length; k++) h += '<th>' + M.head[k] + '</th>';
+  h += '</tr></thead><tbody>';
+  var rows = M.rows();
+  for (var r = 0; r < rows.length; r++) {
+    h += '<tr>';
+    for (k = 0; k < rows[r].length; k++) {
+      c = rows[r][k];
+      if (c && typeof c === 'object') {
+        if (S.solved[c.f]) h += '<td class="fill">' + show(FIELD[c.f]) + '</td>';
+        else h += '<td class="gap' + (curIds[c.f] ? ' cur' : '') + '"><span>?</span></td>';
+      } else h += '<td>' + c + '</td>';
+    }
+    h += '</tr>';
+  }
+  h += '</tbody></table>' + (S.done[S.m] ? '<div class="stamp">VALIDÉ</div>' : '') + '</div>';
+  if (M.extra) h += '<p class="extra">' + M.extra() + '</p>';
+  h += '<p class="extra">Les cases <b>?</b> en jaune sont celles de l\'étape en cours. Elles se remplissent quand tu trouves la bonne réponse.</p>';
+  $('dossier').innerHTML = h;
+}
+
+function dots(M) {
+  var h = '<div class="dots">';
+  for (var k = 0; k < M.steps.length; k++)
+    h += '<span class="dot' + (k < S.step[S.m] || S.done[S.m] ? ' ok' : k === S.step[S.m] ? ' on' : '') + '"></span>';
+  return h + '</div>';
+}
+
+function renderStep() {
+  var M = MISSIONS[S.m];
+  if (S.done[S.m]) { renderWin(); return; }
+  var n = S.step[S.m], st = M.steps[n], h = '', k;
+  h += '<div class="eyebrow">Étape ' + (n + 1) + ' sur ' + M.steps.length + '</div>' + dots(M);
+  h += '<p class="q">' + st.q + '</p>' + (st.sub ? '<p class="sub">' + st.sub + '</p>' : '');
+  if (st.mc) {
+    for (k = 0; k < st.opts.length; k++)
+      h += '<button type="button" class="opt' + (cur.mcWrong[k] ? ' no' : '') + '" data-opt="' + k + '">' + st.opts[k][0] + '</button>';
+    h += '<div class="why" id="why"></div>';
+  } else {
+    for (k = 0; k < st.fields.length; k++) {
+      var f = st.fields[k], ok = S.solved[f.id];
+      h += '<div class="field' + (ok ? ' good' : '') + '" id="box_' + f.id + '">';
+      h += '<label for="in_' + f.id + '">' + f.label + '</label>';
+      h += '<input type="text" id="in_' + f.id + '" autocomplete="off"' + (ok ? ' value="' + fmt(f.ans, f.unit === '' && f.id !== 'pmoy' ? 0 : 2) + '" readonly' : '') + '>';
+      h += '<span class="u">' + f.unit + '</span>';
+      h += '<div class="msg' + (ok ? ' good' : '') + '" id="msg_' + f.id + '">' + (ok ? '✓ ' + f.method : '') + '</div>';
+      if (cur.method && !ok) h += '<div class="meth">' + f.method + '</div>';
+      h += '</div>';
+    }
+  }
+  if (cur.hint) h += '<div class="hint">💡 ' + st.hint + '</div>';
+  h += '<div class="feedback" id="fb"></div><div class="actions">';
+  if (!st.mc) h += '<button class="btn main" type="button" id="check">Vérifier</button>';
+  h += '<button class="btn soft" type="button" id="hintBtn"' + (cur.hint ? ' disabled' : '') + '>Coup de pouce</button>';
+  if (!st.mc) h += '<button class="btn ghost" type="button" id="methBtn"' + (cur.errors < 2 || cur.method ? ' disabled' : '') + '>Voir la méthode' + (cur.errors < 2 ? ' (après 2 essais)' : '') + '</button>';
+  h += '</div>';
+  $('step').innerHTML = h;
+}
+
+function renderWin() {
+  var M = MISSIONS[S.m], got = 0, k;
+  for (k = 0; k < M.steps.length; k++) got += S.stars[S.m + '-' + k] || 0;
+  var max = M.steps.length * 3, r = got / max, n = r >= 0.85 ? 3 : r >= 0.6 ? 2 : 1;
+  var next = -1;
+  for (k = 0; k < S.done.length; k++) if (!S.done[k]) { next = k; break; }
+  var stars = '';
+  for (k = 0; k < 3; k++) stars += k < n ? '★' : '<span class="off">★</span>';
+  var h = '<div class="eyebrow">Mission ' + (S.m + 1) + ' terminée</div>' + dots(M);
+  h += '<div class="win"><div class="big">' + stars + '</div><p class="q">' + got + ' étoiles sur ' + max + '</p><div class="badge">' + M.badge + '</div>';
+  h += '<p class="sub" style="margin-top:14px">' + (n === 3 ? "Excellent travail, ton responsable peut compter sur toi !" : n === 2 ? "Bon travail ! Relis la fiche méthode pour les points où tu as hésité." : "Mission accomplie ! Tu peux la refaire pour gagner plus d'étoiles.") + '</p>';
+  if (next === -1) h += '<p class="q">Les 3 missions sont terminées : ' + totalStars() + ' ★ sur ' + maxStars + '.</p>';
+  h += '</div><div class="actions" style="text-align:center">';
+  if (next !== -1) h += '<button class="btn main" type="button" data-go="' + next + '">Mission ' + (next + 1) + ' →</button>';
+  h += '<button class="btn ghost" type="button" id="redo">Refaire cette mission</button>';
+  if (next === -1) h += '<button class="btn ghost" type="button" id="reset">Tout recommencer</button>';
+  h += '</div>';
+  $('step').innerHTML = h;
+}
+
+function renderAll() { renderTop(); renderDossier(); renderStep(); }
+
+/* ===== logique ===== */
+function award() {
+  var sc = 3;
+  if (cur.hint) sc--;
+  if (cur.errors >= 1) sc--;
+  if (cur.errors >= 3 || cur.method) sc = 1;
+  S.stars[S.m + '-' + S.step[S.m]] = Math.max(1, sc);
+}
+function advance() {
+  award();
+  var M = MISSIONS[S.m], gained = S.stars[S.m + '-' + S.step[S.m]];
+  if (S.step[S.m] + 1 >= M.steps.length) { S.done[S.m] = true; resetCur(); renderAll(); return; }
+  var fb = $('fb');
+  if (fb) { fb.className = 'feedback good'; fb.innerHTML = 'Bravo ! +' + gained + ' ★'; }
+  $('stars').innerHTML = totalStars();
+  setTimeout(function () { S.step[S.m]++; resetCur(); renderAll(); }, 900);
+}
+
+function check() {
+  var st = MISSIONS[S.m].steps[S.step[S.m]], wrong = 0, empty = 0;
+  for (var k = 0; k < st.fields.length; k++) {
+    var f = st.fields[k];
+    if (S.solved[f.id]) continue;
+    var box = $('box_' + f.id), msg = $('msg_' + f.id), inp = $('in_' + f.id);
+    var v = parse(inp.value);
+    box.className = 'field'; msg.className = 'msg'; msg.innerHTML = '';
+    if (v === null) { empty++; msg.className = 'msg bad'; msg.innerHTML = 'Écris un nombre (ex : 12,50).'; continue; }
+    if (near(v, f.ans, f.tol)) {
+      S.solved[f.id] = true; box.className = 'field good'; inp.readOnly = true;
+      msg.className = 'msg good'; msg.innerHTML = '✓ ' + f.method;
+      continue;
+    }
+    wrong++; box.className = 'field wrong';
+    var trap = findTrap(f.traps, v);
+    msg.className = 'msg bad';
+    msg.innerHTML = trap ? trap.m : (Math.abs(v - f.ans) / Math.abs(f.ans) < 0.02 ? "Tout près ! Vérifie ton arrondi (2 chiffres après la virgule)." : "Pas encore. Reprends ton calcul.");
+  }
+  renderDossier();
+  var fb = $('fb');
+  if (empty && !wrong) return;
+  if (wrong || empty) {
+    cur.errors++;
+    fb.className = 'feedback bad';
+    fb.innerHTML = (wrong + empty === 1 ? "Une réponse à corriger." : (wrong + empty) + " réponses à corriger.") + (cur.errors === 1 && !cur.hint ? " Le coup de pouce peut t'aider." : '');
+    var mb = $('methBtn');
+    if (mb && cur.errors >= 2 && !cur.method) { mb.disabled = false; mb.innerHTML = 'Voir la méthode'; }
+    return;
+  }
+  advance();
+}
+
+function keepInputs(fn) {
+  var vals = {}, ins = $('step').getElementsByTagName('input'), k;
+  for (k = 0; k < ins.length; k++) if (!ins[k].readOnly) vals[ins[k].id] = ins[k].value;
+  fn(); renderStep();
+  for (var id in vals) if (vals.hasOwnProperty(id) && $(id)) $(id).value = vals[id];
+}
+
+document.onclick = function (e) {
+  e = e || window.event;
+  var t = upTag(e.target || e.srcElement, 'BUTTON');
+  if (!t) return;
+  var a;
+  if ((a = attr(t, 'data-m')) !== null) { S.m = +a; resetCur(); renderAll(); return; }
+  if ((a = attr(t, 'data-go')) !== null) { S.m = +a; resetCur(); renderAll(); window.scrollTo(0, 0); return; }
+  if ((a = attr(t, 'data-close')) !== null) { $(a).hidden = true; return; }
+  if ((a = attr(t, 'data-k')) !== null) { calcKey(a); return; }
+  if (t.id === 'btnFiche') { $('fiche').hidden = !$('fiche').hidden; $('calc').hidden = true; return; }
+  if (t.id === 'btnCalc') { $('calc').hidden = !$('calc').hidden; $('fiche').hidden = true; return; }
+  if (t.id === 'check') { check(); return; }
+  if (t.id === 'hintBtn') { keepInputs(function () { cur.hint = true; }); return; }
+  if (t.id === 'methBtn') { keepInputs(function () { cur.method = true; }); return; }
+  if (t.id === 'reset') { freshState(); resetCur(); renderAll(); return; }
+  if (t.id === 'redo') {
+    var steps = MISSIONS[S.m].steps;
+    for (var k = 0; k < steps.length; k++) {
+      delete S.stars[S.m + '-' + k];
+      var fl = steps[k].fields || [];
+      for (var q = 0; q < fl.length; q++) delete S.solved[fl[q].id];
+    }
+    S.step[S.m] = 0; S.done[S.m] = false; resetCur(); renderAll(); return;
+  }
+  if ((a = attr(t, 'data-opt')) !== null) {
+    var st = MISSIONS[S.m].steps[S.step[S.m]], n = +a, o = st.opts[n], why = $('why');
+    if (o[1]) {
+      t.className = 'opt yes'; why.style.color = '#1f8a4c'; why.innerHTML = o[2];
+      var all = $('step').getElementsByTagName('button');
+      for (var b = 0; b < all.length; b++) if (all[b].className.indexOf('opt') === 0) all[b].disabled = true;
+      setTimeout(advance, 700);
+    } else if (!cur.mcWrong[n]) {
+      cur.mcWrong[n] = true; cur.errors++; t.className = 'opt no'; why.style.color = '#c2402f'; why.innerHTML = o[2];
+    }
+  }
+};
+
+document.onkeydown = function (e) {
+  e = e || window.event;
+  var t = e.target || e.srcElement;
+  if (e.keyCode === 13 && t && t.tagName === 'INPUT' && t.id.indexOf('in_') === 0) { check(); return false; }
+  if (e.keyCode === 27) { $('fiche').hidden = true; $('calc').hidden = true; }
+};
+
+/* ===== calculatrice ===== */
+var KEYS = ['7', '8', '9', '÷', '4', '5', '6', '×', '1', '2', '3', '−', '0', ',', '(', '+', ')', 'C', '⌫', '='];
+(function () {
+  var h = '';
+  for (var k = 0; k < KEYS.length; k++) h += '<button type="button" data-k="' + KEYS[k] + '"' + (KEYS[k] === '=' ? ' class="eq"' : '') + '>' + KEYS[k] + '</button>';
+  $('keys').innerHTML = h;
+})();
+function calcEval() {
+  var ex = $('calcIn').value.replace(/[×xX*]/g, '*').replace(/[÷:\/]/g, '/').replace(/−/g, '-').replace(/,/g, '.').replace(/\s/g, '');
+  if (!ex) { $('calcOut').innerHTML = ''; return null; }
+  if (!/^[0-9.+\-*\/()]+$/.test(ex)) { $('calcOut').innerHTML = '…'; return null; }
+  try {
+    var r = (new Function('return (' + ex + ');'))();
+    if (typeof r !== 'number' || !isFinite(r)) { $('calcOut').innerHTML = '…'; return null; }
+    r = Math.round(r * 1e6) / 1e6;
+    $('calcOut').innerHTML = '= ' + String(r).replace('.', ',');
+    return r;
+  } catch (err) { $('calcOut').innerHTML = '…'; return null; }
+}
+function calcKey(k) {
+  var inp = $('calcIn');
+  if (k === 'C') inp.value = '';
+  else if (k === '⌫') inp.value = inp.value.slice(0, -1);
+  else if (k === '=') { var r = calcEval(); if (r !== null) inp.value = String(r).replace('.', ','); }
+  else inp.value += k;
+  calcEval();
+}
+$('calcIn').onkeyup = calcEval;
+
+renderAll();
+</script>
+</body>
+</html>
